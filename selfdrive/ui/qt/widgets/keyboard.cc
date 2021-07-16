@@ -3,9 +3,11 @@
 #include <QButtonGroup>
 #include <QHBoxLayout>
 #include <QPushButton>
+#include <QLabel>
 #include <QVBoxLayout>
 #include <QDebug>
 #include <QMouseEvent>
+#include <QTimer>
 
 const int DEFAULT_STRETCH = 1;
 const int SPACEBAR_STRETCH = 3;
@@ -34,14 +36,28 @@ KeyboardLayout::KeyboardLayout(QWidget* parent, const std::vector<QVector<QStrin
 
     for (const QString &p : s) {
       QPushButton* btn = new QPushButton(p);
+      btn->installEventFilter(this);
+      btn->setObjectName(p);
+//      QLabel* btn = new QLabel(p);
+//      btn->setAlignment(Qt::AlignCenter);
 //      btn->setAttribute(Qt::WA_AcceptTouchEvents);
       if (p == BACKSPACE_KEY) {
-        btn->setAutoRepeat(true);
+//        btn->setAutoRepeat(true);
       } else if (p == ENTER_KEY) {
-        btn->setStyleSheet("background-color: #465BEA;");
+//        btn->setStyleSheet("background-color: #465BEA;");
       }
+
       btn->setFixedHeight(135);
-      btn_group->addButton(btn);
+//      QObject::connect(btn, &QPushButton::pressed, this, [=]() {
+//        qDebug() << "HERE";
+//        btn->releaseMouse();
+//      });
+//      QObject::connect(btn, &QPushButton::released, this, [=]() {
+//        qDebug() << "HERE";
+//        btn->releaseMouse();
+//      });
+//      btn->
+//      btn_group->addButton(btn);
       hlayout->addWidget(btn, p == QString("  ") ? SPACEBAR_STRETCH : DEFAULT_STRETCH);
     }
 
@@ -65,17 +81,42 @@ KeyboardLayout::KeyboardLayout(QWidget* parent, const std::vector<QVector<QStrin
       background-color: #333333;
     }
   )");
+
+  QTimer::singleShot(500, this, [=]() {
+    for (int i = 0; i < main_layout->count(); i++) {
+      QLayout *layout = main_layout->itemAt(i)->layout();
+      if (layout != NULL) {
+        for (int j = 0; j < layout->count(); j++) {
+          QWidget *widget = layout->itemAt(j)->widget();
+          if (widget != NULL) {
+            qDebug() << widget;
+            qDebug() << widget->pos() << widget->geometry() << widget->x() << widget->y();
+          }
+        }
+      }
+    }
+  });
 }
 
 void KeyboardLayout::mousePressEvent(QMouseEvent *ev) {
-  qDebug() << ev->localPos();
+//  qDebug() << ev->localPos();
 }
 
 bool KeyboardLayout::eventFilter(QObject * obj, QEvent * event) {
-  if (event->type() == QEvent::MouseButtonPress) {
-    qDebug() << "EVENT:" << event;
+  if (obj->metaObject()->className() == QString("QPushButton") && event->type() == QEvent::Enter) {
+//    QPushButton *btn = dynamic_cast<QPushButton*>(btn);
+    QPushButton* btn = static_cast<QPushButton*>(obj);
+    qDebug() << btn->objectName();
+    qDebug() << btn->text();
+    btn->setText("clk");
+    return true;
+  } else {
+    return QWidget::eventFilter(obj, event);
   }
-  return true;
+
+//  if (event->type() == QEvent::MouseButtonPress) {
+//    qDebug() << "EVENT:" << event;
+//  }
 }
 
 Keyboard::Keyboard(QWidget *parent) : QFrame(parent) {
