@@ -12,7 +12,11 @@ class KeyboardLayout : public QWidget {
   Q_OBJECT
 
 public:
- explicit KeyboardLayout(QWidget* parent, const std::vector<QVector<QString>>& layout);
+  explicit KeyboardLayout(QWidget* parent, const std::vector<QVector<QString>>& layout);
+
+protected:
+  bool eventFilter(QObject * obj, QEvent * event) override;
+  void mousePressEvent(QMouseEvent *ev) override;
 };
 
 class Keyboard : public QFrame {

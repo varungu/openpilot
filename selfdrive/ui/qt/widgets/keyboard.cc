@@ -4,6 +4,8 @@
 #include <QHBoxLayout>
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QDebug>
+#include <QMouseEvent>
 
 const int DEFAULT_STRETCH = 1;
 const int SPACEBAR_STRETCH = 3;
@@ -14,6 +16,7 @@ const QString ENTER_KEY = "⏎";
 const QStringList CONTROL_BUTTONS = {"↑", "↓", "ABC", "#+=", "123"};
 
 KeyboardLayout::KeyboardLayout(QWidget* parent, const std::vector<QVector<QString>>& layout) : QWidget(parent) {
+  installEventFilter(this);
   QVBoxLayout* main_layout = new QVBoxLayout(this);
   main_layout->setMargin(0);
   main_layout->setSpacing(20);
@@ -31,7 +34,7 @@ KeyboardLayout::KeyboardLayout(QWidget* parent, const std::vector<QVector<QStrin
 
     for (const QString &p : s) {
       QPushButton* btn = new QPushButton(p);
-      btn->setAttribute(Qt::WA_AcceptTouchEvents);
+//      btn->setAttribute(Qt::WA_AcceptTouchEvents);
       if (p == BACKSPACE_KEY) {
         btn->setAutoRepeat(true);
       } else if (p == ENTER_KEY) {
@@ -62,6 +65,17 @@ KeyboardLayout::KeyboardLayout(QWidget* parent, const std::vector<QVector<QStrin
       background-color: #333333;
     }
   )");
+}
+
+void KeyboardLayout::mousePressEvent(QMouseEvent *ev) {
+  qDebug() << ev->localPos();
+}
+
+bool KeyboardLayout::eventFilter(QObject * obj, QEvent * event) {
+  if (event->type() == QEvent::MouseButtonPress) {
+    qDebug() << "EVENT:" << event;
+  }
+  return true;
 }
 
 Keyboard::Keyboard(QWidget *parent) : QFrame(parent) {
