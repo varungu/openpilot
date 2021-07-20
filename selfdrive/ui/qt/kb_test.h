@@ -21,6 +21,7 @@ public:
 protected:
   void setDown(bool down);
   void focusOutEvent(QFocusEvent *e) override;
+  void mouseReleaseEvent(QMouseEvent *e) override;
 //  void touchEvent(QTouchEvent *ev);
 };
 

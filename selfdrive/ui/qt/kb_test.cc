@@ -28,6 +28,11 @@ void QTouchButton::focusOutEvent(QFocusEvent *e) {
   QPushButton::focusOutEvent(e);
 }
 
+void QTouchButton::mouseReleaseEvent(QMouseEvent *e) {
+  qDebug() << "mouseReleaseEvent for:" << objectName();
+  QPushButton::mouseReleaseEvent(e);
+}
+
 //void QTouchButton::event(QEvent *event) {
 //  if (ev->type() == QEvent::TouchBegin || ev->type() == QEvent::TouchEnd || ev->type() == QEvent::TouchUpdate) {
 //    qDebug() << "TOUCH EVENT:" << ev;
