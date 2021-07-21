@@ -325,8 +325,9 @@ void WifiManager::propertyChange(const QString &interface, const QVariantMap &pr
       firstScan = false;
     }
   } else if (interface == NM_DBUS_INTERFACE_DEVICE_WIRELESS && props.contains("ActiveAccessPoint")) {
-    const QDBusObjectPath &path = props.value("ActiveAccessPoint").value<QDBusObjectPath>();
-    activeAp = path.path();
+//    const QDBusObjectPath &path = props.value("ActiveAccessPoint").value<QDBusObjectPath>();
+    qDebug() << "Got ActiveAccessPoint signal!";
+//    activeAp = path.path();
   }
 }
 
@@ -438,8 +439,8 @@ void WifiManager::initActiveAp() {
   QDBusInterface device_props(NM_DBUS_SERVICE, adapter, NM_DBUS_INTERFACE_PROPERTIES, bus);
   device_props.setTimeout(DBUS_TIMEOUT);
 
-  const QDBusMessage &response = device_props.call("Get", NM_DBUS_INTERFACE_DEVICE_WIRELESS, "ActiveAccessPoint");
-  activeAp = get_response<QDBusObjectPath>(response).path();
+//  const QDBusMessage &response = device_props.call("Get", NM_DBUS_INTERFACE_DEVICE_WIRELESS, "ActiveAccessPoint");
+//  activeAp = get_response<QDBusObjectPath>(response).path();
 }
 
 
