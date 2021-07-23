@@ -75,6 +75,9 @@ void Networking::refresh() {
 }
 
 void Networking::connectToNetwork(const Network &n) {
+  qDebug() << "isKnown:" << wifi->isKnownConnection(n.ssid);
+  qDebug() << "open:" << n.security_type == SecurityType::OPEN;
+  qDebug() << "wpa:" << n.security_type == SecurityType::WPA;
   if (wifi->isKnownConnection(n.ssid)) {
     wifi->activateWifiConnection(n.ssid);
   } else if (n.security_type == SecurityType::OPEN) {
@@ -234,7 +237,10 @@ void WifiUI::refresh() {
       padding-top: 50px;
       padding-bottom: 50px;
     )").arg(weight));
-    QObject::connect(ssid_label, &QPushButton::clicked, this, [=]() { emit connectToNetwork(network); });
+    QObject::connect(ssid_label, &QPushButton::clicked, this, [=]() {
+      qDebug() << "Clicked connect for:" << network.ssid;
+      emit connectToNetwork(network);
+    });
     hlayout->addWidget(ssid_label, network.connected == ConnectedType::CONNECTING ? 0 : 1);
 
     if (network.connected == ConnectedType::CONNECTING) {
