@@ -76,8 +76,8 @@ void Networking::refresh() {
 
 void Networking::connectToNetwork(const Network &n) {
   qDebug() << "isKnown:" << wifi->isKnownConnection(n.ssid);
-  qDebug() << "open:" << n.security_type == SecurityType::OPEN;
-  qDebug() << "wpa:" << n.security_type == SecurityType::WPA;
+  qDebug() << "open:" << (n.security_type == SecurityType::OPEN);
+  qDebug() << "wpa:" << (n.security_type == SecurityType::WPA);
   if (wifi->isKnownConnection(n.ssid)) {
     wifi->activateWifiConnection(n.ssid);
   } else if (n.security_type == SecurityType::OPEN) {
