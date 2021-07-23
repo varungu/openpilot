@@ -60,6 +60,7 @@ private:
   QStackedLayout* main_layout = nullptr;
   QWidget* wifiScreen = nullptr;
   AdvancedNetworking* an = nullptr;
+  int pendingRefreshes = 0;
 
   WifiUI* wifiWidget;
   WifiManager* wifi = nullptr;

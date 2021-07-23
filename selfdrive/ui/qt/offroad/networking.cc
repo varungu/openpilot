@@ -68,12 +68,20 @@ Networking::Networking(QWidget* parent, bool show_advanced) : QFrame(parent) {
 }
 
 void Networking::refresh() {
-  QElapsedTimer timer;
-  timer.start();
-  wifiWidget->refresh();
-  double elapsed = timer.nsecsElapsed() / 1e6;
-
-  qDebug() << "Took" << elapsed << "ms to draw" << wifi->seen_networks.size() << "networks -" << elapsed / wifi->seen_networks.size() << "ms/network";
+  pendingRefreshes++;
+  qDebug() << "Requested refresh:" << pendingRefreshes;
+  QTimer::singleShot(100, this, [=]() {
+    if (--pendingRefreshes == 0) {
+      QElapsedTimer timer;
+      timer.start();
+      qDebug() << "Refreshing!";
+      wifiWidget->refresh();
+      double elapsed = timer.nsecsElapsed() / 1e6;
+      qDebug() << "Took" << elapsed << "ms to draw" << wifi->seen_networks.size() << "networks -" << elapsed / wifi->seen_networks.size() << "ms/network";
+    } else {
+      qDebug() << "Not refreshing!";
+    }
+  });
   an->refresh();
 }
 
