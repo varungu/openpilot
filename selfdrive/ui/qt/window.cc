@@ -1,6 +1,7 @@
 #include "selfdrive/ui/qt/window.h"
 
 #include <QFontDatabase>
+#include <QDebug>
 
 #include "selfdrive/hardware/hw.h"
 
@@ -78,6 +79,20 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::MouseButtonPress) {
     device.setAwake(true, true);
   }
+//  if (obj->inherits("QWidgetWindow")) {
+//    return QWidget::eventFilter(obj, event);
+//  }
+
+//  const static QSet<QEvent::Type> mouse_events({QEvent::MouseButtonPress, QEvent::MouseButtonRelease, QEvent::MouseMove});
+//  if (mouse_events.contains(event->type())) {
+//    QWidget *w = qobject_cast<QWidget*>(obj);
+//    if (w && (event->type() == QEvent::MouseButtonPress || event->type() == QEvent::MouseMove))
+//    w->grabMouse();
+//    if (w && event->type() == QEvent::QEvent::MouseButtonRelease)
+//    w->releaseMouse();
+//    qDebug() << obj->metaObject()->className() << event;
+//    return QWidget::eventFilter(obj, event);
+//  }
 
 #ifdef QCOM
   // filter out touches while in android activity

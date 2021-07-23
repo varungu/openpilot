@@ -10,6 +10,21 @@
 #include "selfdrive/ui/qt/widgets/ssh_keys.h"
 #include "selfdrive/ui/qt/widgets/toggle.h"
 
+class QTouchButton : public QPushButton {
+  Q_OBJECT
+
+public:
+  QTouchButton(const QString &text, QWidget *parent = nullptr) : QPushButton(text, parent) {
+    setAttribute(Qt::WA_AcceptTouchEvents);
+    setFocusPolicy(Qt::NoFocus);
+  }
+
+  QTouchButton(const QIcon &icon, const QString &text, QWidget *parent = nullptr) : QPushButton(icon, text, parent) {
+    setAttribute(Qt::WA_AcceptTouchEvents);
+    setFocusPolicy(Qt::NoFocus);
+  }
+};
+
 class WifiUI : public QWidget {
   Q_OBJECT
 
@@ -22,6 +37,12 @@ private:
   QPixmap lock;
   QPixmap checkmark;
   QVector<QPixmap> strengths;
+  QWidget *newNetworkWidget(const Network &network);
+  QString currentButton;
+
+//protected:
+//  bool event(QEvent *event);
+//  bool eventFilter(QObject *obj, QEvent *event);
 
 signals:
   void connectToNetwork(const Network &n);
