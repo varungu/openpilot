@@ -314,7 +314,12 @@ void clear_locks() {
 } // namespace
 
 int main(int argc, char** argv) {
-  setpriority(PRIO_PROCESS, 0, -20);
+  if (Hardware::TICI()) {
+    set_realtime_priority(2);
+    set_core_affinity(2);
+  } else {
+    setpriority(PRIO_PROCESS, 0, -20);
+  }
 
   clear_locks();
 
